@@ -1,0 +1,16 @@
+.container {
+    margin-top: 8rem !important;
+    /* background-color: #f1f3f6; */
+}
+
+.hrem {
+    min-height: 50rem;
+    position: relative;
+    z-index: 1;
+}
+
+.card {
+    /* background-color: #fff !important; */
+    border: none !important;
+}
+
