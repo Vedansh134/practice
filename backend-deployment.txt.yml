@@ -1,0 +1,47 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: backend-deployment
+  namespace: chat-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      name: backend-pod
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: chatapp-backend
+        image: kvedansh786/chatappbackend:latest
+        ports:
+        - containerPort: 5001
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: MONGODB_URI
+          value: mongodb://mongoadmin:secret@mongodb:27017/dbname?authSource=admin
+          # The MONGODB-URI environment variable is used to connect the backend service to MongoDB.
+          # It includes the username, password, service name, and database name.
+          # This environment variable is used to connect to the MongoDB service
+          # mongoadmin: username
+          # secret: password
+          # mongodb: service name
+          # chatapp: database name
+          # authSource=admin: specifies the database to authenticate against
+        # - name: JWT_SECRET
+        #   value: "eyJhbGciOiJIUzUxMiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTc1MjQ3ODE3MiwiaWF0IjoxNzUyNDc4MTcyfQ.-XP4IfW5mKaSx1qbkCvib8ZeG3ldkuAHf699dnaS7vs4xk6-ZhzLEMa3EUzn4BbVwlgzsgoIK-xmsp73Zzir4Q"
+          # The JWT_SECRET environment variable is used to sign and verify JSON Web Tokens (JWTs).
+          # It is important to keep this key secret and not expose it publicly.
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: chatapp-secret
+              key: jwt
+        - name: PORT
+          value: "5001"
+          # The PORT environment variable specifies the port on which the backend service will listen.
+          # It is set to 5001 to match the containerPort defined in the deployment.
